@@ -1,4 +1,4 @@
-const Navbar = () => {
+const Navbar = ({ onNavigate, currentView }) => {
   const total = 25000
   const token = false
 
@@ -8,7 +8,13 @@ const Navbar = () => {
         <span className="navbar__brand">Pizzería Mamma Mia!</span>
 
         <div className="navbar__links">
-          <button type="button" className="button button--nav">🍕 Home</button>
+          <button
+            type="button"
+            className={`button button--nav ${currentView === 'home' ? 'button--active' : ''}`}
+            onClick={() => onNavigate('home')}
+          >
+            🍕 Home
+          </button>
 
           {token ? (
             <>
@@ -17,8 +23,20 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <button type="button" className="button button--nav">🔐 Login</button>
-              <button type="button" className="button button--nav">🔐 Register</button>
+              <button
+                type="button"
+                className={`button button--nav ${currentView === 'login' ? 'button--active' : ''}`}
+                onClick={() => onNavigate('login')}
+              >
+                🔐 Login
+              </button>
+              <button
+                type="button"
+                className={`button button--nav ${currentView === 'register' ? 'button--active' : ''}`}
+                onClick={() => onNavigate('register')}
+              >
+                🔐 Register
+              </button>
             </>
           )}
 
