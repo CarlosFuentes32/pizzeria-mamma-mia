@@ -128,6 +128,22 @@ button {
   gap: 1.4rem;
 }
 
+.catalog-status {
+  width: min(900px, calc(100% - 2.5rem));
+  margin: 3rem auto;
+  padding: 1rem;
+  border-radius: 0.35rem;
+  color: #495057;
+  background: #e9ecef;
+  text-align: center;
+}
+
+.catalog-status--error {
+  color: #842029;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+}
+
 .pizza-card {
   min-width: 0;
   max-width: 100%;
@@ -203,6 +219,86 @@ button {
 .button--dark {
   color: #ffffff;
   background: #212529;
+}
+
+.pizza-detail-page {
+  flex: 1;
+  padding: 3rem 1.25rem;
+  display: grid;
+  place-items: center;
+  background: #f5f5f5;
+}
+
+.pizza-detail {
+  width: min(1050px, 100%);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 1.2fr;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.pizza-detail__image {
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  display: block;
+  object-fit: cover;
+}
+
+.pizza-detail__body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pizza-detail__body h1 {
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 2rem;
+  text-transform: capitalize;
+}
+
+.pizza-detail__description {
+  color: #495057;
+  line-height: 1.6;
+}
+
+.pizza-detail__ingredients {
+  padding: 0.5rem 0 1.5rem;
+}
+
+.pizza-detail__ingredients h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.pizza-detail__ingredients ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.pizza-detail__footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+.pizza-detail__footer p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .form-page {
@@ -419,6 +515,15 @@ button {
     width: min(100%, 480px);
     margin: 0 auto;
   }
+
+  .pizza-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .pizza-detail__image {
+    height: 300px;
+    min-height: 0;
+  }
 }
 
 @media (max-width: 520px) {
@@ -457,5 +562,22 @@ button {
   .cart-item__price,
   .cart-item__controls {
     grid-column: 2;
+  }
+
+  .pizza-detail-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .pizza-detail__body {
+    padding: 1.25rem;
+  }
+
+  .pizza-detail__ingredients ul {
+    grid-template-columns: 1fr;
+  }
+
+  .pizza-detail__footer {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
