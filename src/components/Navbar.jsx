@@ -1,4 +1,4 @@
-const Navbar = ({ onNavigate, currentView }) => {
+const Navbar = ({ onNavigate = () => {}, currentView = '' }) => {
   const total = 25000
   const token = false
 
@@ -40,7 +40,11 @@ const Navbar = ({ onNavigate, currentView }) => {
             </>
           )}
 
-          <button type="button" className="button button--total">
+          <button
+            type="button"
+            className={`button button--total ${currentView === 'cart' ? 'button--total-active' : ''}`}
+            onClick={() => onNavigate('cart')}
+          >
             🛒 Total: ${total.toLocaleString('es-CL')}
           </button>
         </div>

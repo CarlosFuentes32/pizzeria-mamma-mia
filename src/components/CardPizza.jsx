@@ -19,7 +19,11 @@ const CardPizza = ({ name, price, ingredients, img }) => {
         <h2>Pizza {name}</h2>
         <div className="pizza-card__ingredients">
           <p>Ingredientes:</p>
-          <p>🍕 {ingredients.join(', ')}</p>
+          <ul>
+            {ingredients.map((ingredient) => (
+              <li key={`${name}-${ingredient}`}>🍕 {ingredient}</li>
+            ))}
+          </ul>
         </div>
         <p className="pizza-card__price">Precio: ${price.toLocaleString('es-CL')}</p>
 
