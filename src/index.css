@@ -21,6 +21,51 @@ button {
   font: inherit;
 }
 
+a.button {
+  text-decoration: none;
+}
+
+.simple-page {
+  flex: 1;
+  min-height: 65vh;
+  padding: 3rem 1.25rem;
+  display: grid;
+  place-items: center;
+  background: #f5f5f5;
+}
+
+.simple-card {
+  width: min(520px, 100%);
+  padding: 2.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+  text-align: center;
+}
+
+.simple-card h1 {
+  margin: 0.75rem 0;
+}
+
+.simple-card__icon,
+.not-found-code {
+  display: block;
+  color: #dc3545;
+  font-size: 4rem;
+  font-weight: 800;
+}
+
+.simple-card__lead {
+  color: #6c757d;
+}
+
+.profile-email {
+  margin: 1.25rem 0 1.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
 .app {
   min-height: 100vh;
   display: flex;

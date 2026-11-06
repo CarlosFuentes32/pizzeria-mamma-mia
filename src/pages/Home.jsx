@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import Header from './Header.jsx'
-import CardPizza from './CardPizza.jsx'
+import Header from '../components/Header.jsx'
+import CardPizza from '../components/CardPizza.jsx'
 import { API_URL } from '../config/api.js'
 
 const PIZZAS_URL = `${API_URL}/api/pizzas`

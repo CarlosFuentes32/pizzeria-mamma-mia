@@ -1,4 +1,6 @@
-const Navbar = ({ onNavigate = () => {}, currentView = '' }) => {
+import { Link } from 'react-router-dom'
+
+const Navbar = () => {
   const total = 25000
   const token = false
 
@@ -8,45 +10,29 @@ const Navbar = ({ onNavigate = () => {}, currentView = '' }) => {
         <span className="navbar__brand">Pizzería Mamma Mia!</span>
 
         <div className="navbar__links">
-          <button
-            type="button"
-            className={`button button--nav ${currentView === 'home' ? 'button--active' : ''}`}
-            onClick={() => onNavigate('home')}
-          >
+          <Link className="button button--nav" to="/">
             🍕 Home
-          </button>
+          </Link>
 
           {token ? (
             <>
-              <button type="button" className="button button--nav">🔓 Profile</button>
+              <Link className="button button--nav" to="/profile">🔓 Profile</Link>
               <button type="button" className="button button--nav">🔒 Logout</button>
             </>
           ) : (
             <>
-              <button
-                type="button"
-                className={`button button--nav ${currentView === 'login' ? 'button--active' : ''}`}
-                onClick={() => onNavigate('login')}
-              >
+              <Link className="button button--nav" to="/login">
                 🔐 Login
-              </button>
-              <button
-                type="button"
-                className={`button button--nav ${currentView === 'register' ? 'button--active' : ''}`}
-                onClick={() => onNavigate('register')}
-              >
+              </Link>
+              <Link className="button button--nav" to="/register">
                 🔐 Register
-              </button>
+              </Link>
             </>
           )}
 
-          <button
-            type="button"
-            className={`button button--total ${currentView === 'cart' ? 'button--total-active' : ''}`}
-            onClick={() => onNavigate('cart')}
-          >
+          <Link className="button button--total" to="/cart">
             🛒 Total: ${total.toLocaleString('es-CL')}
-          </button>
+          </Link>
         </div>
       </div>
     </nav>
