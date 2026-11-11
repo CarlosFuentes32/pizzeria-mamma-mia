@@ -1,6 +1,9 @@
 import fallbackPizza from '../assets/Header.jpg'
+import { useCart } from '../context/CartContext.js'
 
-const CardPizza = ({ name, price, ingredients, img }) => {
+const CardPizza = ({ id, name, price, ingredients, img }) => {
+  const { addPizza } = useCart()
+
   const useFallbackImage = (event) => {
     event.currentTarget.onerror = null
     event.currentTarget.src = fallbackPizza
@@ -29,7 +32,14 @@ const CardPizza = ({ name, price, ingredients, img }) => {
 
         <div className="pizza-card__actions">
           <button type="button" className="button button--outline">Ver más 👀</button>
-          <button type="button" className="button button--dark">Añadir 🛒</button>
+          <button
+            type="button"
+            className="button button--dark"
+            onClick={() => addPizza({ id, name, price, ingredients, img })}
+            aria-label={`Añadir pizza ${name} al carrito`}
+          >
+            Añadir 🛒
+          </button>
         </div>
       </div>
     </article>

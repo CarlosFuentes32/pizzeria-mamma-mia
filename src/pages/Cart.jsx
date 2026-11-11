@@ -1,21 +1,8 @@
-import { useState } from 'react'
-import { pizzaCart } from '../data/pizzas.js'
 import fallbackPizza from '../assets/Header.jpg'
+import { useCart } from '../context/CartContext.js'
 
 const Cart = () => {
-  const [cart, setCart] = useState(() => pizzaCart.map((pizza) => ({ ...pizza })))
-
-  const updateQuantity = (id, change) => {
-    setCart((currentCart) =>
-      currentCart
-        .map((pizza) =>
-          pizza.id === id ? { ...pizza, count: pizza.count + change } : pizza,
-        )
-        .filter((pizza) => pizza.count > 0),
-    )
-  }
-
-  const total = cart.reduce((sum, pizza) => sum + pizza.price * pizza.count, 0)
+  const { cart, increasePizza, decreasePizza, total } = useCart()
 
   const useFallbackImage = (event) => {
     event.currentTarget.onerror = null
@@ -45,7 +32,7 @@ const Cart = () => {
                   <button
                     type="button"
                     className="quantity-button quantity-button--remove"
-                    onClick={() => updateQuantity(pizza.id, -1)}
+                    onClick={() => decreasePizza(pizza.id)}
                     aria-label={`Quitar una pizza ${pizza.name}`}
                   >
                     −
@@ -54,7 +41,7 @@ const Cart = () => {
                   <button
                     type="button"
                     className="quantity-button quantity-button--add"
-                    onClick={() => updateQuantity(pizza.id, 1)}
+                    onClick={() => increasePizza(pizza.id)}
                     aria-label={`Agregar una pizza ${pizza.name}`}
                   >
                     +
