@@ -1,12 +1,20 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUser } from '../context/UserContext.js'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState({ type: '', text: '' })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const submittingRef = useRef(false)
+  const navigate = useNavigate()
+  const { login } = useUser()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    if (submittingRef.current) return
+    setMessage({ type: '', text: '' })
 
     if (!email.trim() || !password) {
       setMessage({ type: 'error', text: 'Todos los campos son obligatorios.' })
@@ -21,7 +29,18 @@ const Login = () => {
       return
     }
 
-    setMessage({ type: 'success', text: '¡Inicio de sesión exitoso!' })
+    submittingRef.current = true
+    setIsSubmitting(true)
+
+    try {
+      await login({ email: email.trim(), password })
+      navigate('/', { replace: true })
+    } catch (error) {
+      setMessage({ type: 'error', text: error.message })
+    } finally {
+      submittingRef.current = false
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -53,7 +72,9 @@ const Login = () => {
             />
           </div>
 
-          <button type="submit" className="button button--submit">Ingresar</button>
+          <button type="submit" className="button button--submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Ingresando...' : 'Ingresar'}
+          </button>
         </form>
 
         {message.text && (

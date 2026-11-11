@@ -1,6 +1,6 @@
 # Pizzería Mamma Mía
 
-Proyecto frontend desarrollado con React y Vite para los Hitos 1 al 7 del curso Full Stack JavaScript de Desafío Latam. La aplicación consume una API de pizzas, utiliza React Router, comparte el carrito mediante Context API y simula el estado de sesión del usuario.
+Proyecto frontend desarrollado con React y Vite para los Hitos 1 al 8 del curso Full Stack JavaScript de Desafío Latam. La aplicación consume una API de pizzas, utiliza React Router, comparte el carrito mediante Context API y autentica usuarios con JWT.
 
 ## Sitio publicado
 
@@ -11,7 +11,7 @@ GitHub Pages presenta siempre la última versión desplegada desde la rama `main
 
 ## Evolución del proyecto por hitos
 
-El historial contiene un commit de cierre identificable para cada hito. Los Hitos 1 y 7 se asignan por sus cambios y su posición en el historial; aunque sus mensajes originales no incluyen el número, no hay commits intermedios ni evidencia de que agrupen otras entregas.
+El historial contiene un cierre identificable para cada hito. Los Hitos 1 y 7 se asignan por sus cambios y su posición en el historial; aunque sus mensajes originales no incluyen el número, no hay commits intermedios ni evidencia de que agrupen otras entregas.
 
 | Hito | Objetivo | Funcionalidades implementadas en la entrega | Archivos principales | Commit de cierre |
 | --- | --- | --- | --- | --- |
@@ -22,6 +22,7 @@ El historial contiene un commit de cierre identificable para cada hito. Los Hito
 | 5 | Añadir navegación con React Router. | Rutas para Home, Register, Login, Cart, Pizza, Profile y 404; páginas trasladadas a `src/pages`; Navbar y Footer compartidos; fallback de Pages para rutas internas. | `src/main.jsx`, `src/App.jsx`, `src/pages/`, `src/components/Navbar.jsx`, `.github/workflows/deploy-pages.yml` | [`c81e813`](https://github.com/CarlosFuentes32/pizzeria-mamma-mia/commit/c81e8136e79a79130b06063dec343bb0e8e0e0b6) |
 | 6 | Compartir globalmente el estado del carrito. | CartContext y CartProvider; botones Añadir desde Home; cantidades y total sincronizados entre Navbar y Cart; eliminación de productos al reducir su cantidad a cero. | `src/context/CartContext.js`, `src/context/CartProvider.jsx`, `src/components/CardPizza.jsx`, `src/components/Navbar.jsx`, `src/pages/Home.jsx`, `src/pages/Cart.jsx` | [`a6dccb6`](https://github.com/CarlosFuentes32/pizzeria-mamma-mia/commit/a6dccb64937c5dd7afd39c5642b84247c5c4a8a6) |
 | 7 | Incorporar rutas dinámicas y un estado global de sesión. | Pizza obtiene el `id` con `useParams` y consulta `/api/pizzas/:id`; “Ver más” abre la pizza seleccionada; UserContext inicia con token simulado `true`; Navbar, rutas y botón Pagar reaccionan al estado de sesión. | `src/context/UserContext.js`, `src/context/UserProvider.jsx`, `src/pages/Pizza.jsx`, `src/pages/Profile.jsx`, `src/pages/Cart.jsx`, `src/components/CardPizza.jsx`, `src/components/Navbar.jsx`, `src/App.jsx` | [`3659780`](https://github.com/CarlosFuentes32/pizzeria-mamma-mia/commit/3659780d385314befb2bc7dc2ec5b6d62f30aa79) |
+| 8 | Reemplazar la sesión simulada por autenticación real con JWT. | UserContext centraliza registro, login, perfil y logout; Login y Register muestran errores reales de la API; Profile presenta el correo autenticado; Cart envía la compra simulada con JWT y muestra éxito solo tras la confirmación. | `src/context/UserProvider.jsx`, `src/pages/Login.jsx`, `src/pages/Register.jsx`, `src/pages/Profile.jsx`, `src/pages/Cart.jsx` | [`hito-8`](https://github.com/CarlosFuentes32/pizzeria-mamma-mia/tree/hito-8) |
 
 ## Instalación y ejecución del frontend
 
@@ -75,23 +76,29 @@ El backend debe quedar disponible en `http://localhost:5000`. Los endpoints util
 ```text
 GET /api/pizzas
 GET /api/pizzas/:id
+POST /api/auth/register
+POST /api/auth/login
+GET /api/auth/me
+POST /api/checkouts
 ```
 
 También puede iniciarse sin recarga automática mediante `npm start`.
 
+`GET /api/auth/me` y `POST /api/checkouts` requieren `Authorization: Bearer <token>`. La pauta muestra `/api/checkout` en un ejemplo, pero tanto el criterio de evaluación como el backend oficial definen la ruta correcta en plural: `/api/checkouts`.
+
 ## Guía de revisión
 
-1. Abre el [sitio publicado](https://carlosfuentes32.github.io/pizzeria-mamma-mia/). Home debe cargar seis pizzas desde la API pública.
-2. Pulsa **Ver más** en dos tarjetas diferentes. La URL y el detalle deben corresponder al identificador seleccionado.
-3. Regresa a Home, añade dos pizzas distintas y repite una de ellas. El total del Navbar debe actualizarse.
-4. Abre **Cart**, usa `+` y `−` y comprueba que las cantidades y el total coincidan con el Navbar. Al reducir una cantidad a cero, la fila desaparece.
-5. El Hito 7 inicia deliberadamente con `token = true`. Por eso al cargar la aplicación aparecen **Profile** y **Logout**, mientras `/login` y `/register` redirigen a Home.
-6. Añade al menos una pizza al carrito y verifica que **Pagar** esté habilitado. Luego pulsa **Logout** o **Cerrar sesión** desde Profile: el token simulado pasa a `false`, aparecen **Login** y **Register**, `/profile` redirige a `/login` y **Pagar** queda deshabilitado.
-7. El Login y el Register de esta etapa siguen siendo formularios simulados: validan los datos, pero no vuelven a cambiar el token a `true`. Para restablecer el estado inicial simulado, recarga la aplicación.
-8. Abre una ruta inexistente para comprobar la página NotFound y usa **Volver al inicio**.
+1. Abre el [sitio publicado](https://carlosfuentes32.github.io/pizzeria-mamma-mia/). La aplicación inicia sin sesión y Home debe cargar seis pizzas desde la API pública.
+2. En **Register**, crea una cuenta ficticia con correo válido y una contraseña de seis o más caracteres. Al completarse la petición debe volver a Home y el Navbar debe mostrar **Profile** y **Logout**.
+3. Abre **Profile** y comprueba que muestre el mismo correo obtenido desde `GET /api/auth/me`. Pulsa **Cerrar sesión** y verifica la redirección a Login.
+4. Inicia sesión con la cuenta recién creada. Un correo inexistente o una contraseña incorrecta deben dejar el formulario visible y mostrar el error de la API.
+5. Regresa a Home, añade dos pizzas distintas y repite una. El total del Navbar debe reflejar las cantidades.
+6. Abre **Cart**, usa `+` y `−` y comprueba que el total coincida con el Navbar. Pulsa **Pagar** con sesión: el mensaje `¡Compra simulada realizada con éxito!` debe aparecer solo después de la respuesta de `/api/checkouts`.
+7. Pulsa **Logout** en el Navbar. Deben aparecer **Login** y **Register**, `/profile` debe redirigir a `/login` y **Pagar** debe quedar deshabilitado. La sesión se mantiene únicamente en memoria, por lo que recargar también cierra la sesión.
+8. Pulsa **Ver más** en tarjetas diferentes para comprobar las rutas dinámicas y abre una dirección inexistente para revisar NotFound.
 
 ## Publicación
 
 Cada push a `main` ejecuta `.github/workflows/deploy-pages.yml`: instala dependencias con `npm ci`, ejecuta lint y build, crea el fallback `404.html` para React Router y publica `dist` mediante GitHub Pages.
 
-La URL pública corresponde a la versión más reciente. Para estudiar una entrega anterior sin confundirla con el estado actual, utiliza el enlace de su commit en la tabla o la etiqueta anotada `hito-1` a `hito-7` correspondiente.
+La URL pública corresponde a la versión más reciente. Para estudiar una entrega anterior sin confundirla con el estado actual, utiliza el enlace de su commit en la tabla o la etiqueta anotada `hito-1` a `hito-8` correspondiente.
