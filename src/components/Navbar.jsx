@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext.js'
+import { useUser } from '../context/UserContext.js'
 
 const Navbar = () => {
   const { total } = useCart()
-  const token = false
+  const { token, logout } = useUser()
 
   return (
     <nav className="navbar" aria-label="Navegación principal">
@@ -18,7 +19,9 @@ const Navbar = () => {
           {token ? (
             <>
               <Link className="button button--nav" to="/profile">🔓 Profile</Link>
-              <button type="button" className="button button--nav">🔒 Logout</button>
+              <button type="button" className="button button--nav" onClick={logout}>
+                🔒 Logout
+              </button>
             </>
           ) : (
             <>

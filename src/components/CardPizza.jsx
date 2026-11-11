@@ -1,4 +1,5 @@
 import fallbackPizza from '../assets/Header.jpg'
+import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext.js'
 
 const CardPizza = ({ id, name, price, ingredients, img }) => {
@@ -31,7 +32,9 @@ const CardPizza = ({ id, name, price, ingredients, img }) => {
         <p className="pizza-card__price">Precio: ${price.toLocaleString('es-CL')}</p>
 
         <div className="pizza-card__actions">
-          <button type="button" className="button button--outline">Ver más 👀</button>
+          <Link className="button button--outline" to={`/pizza/${id}`}>
+            Ver más 👀
+          </Link>
           <button
             type="button"
             className="button button--dark"

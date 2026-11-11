@@ -1,34 +1,43 @@
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import fallbackPizza from '../assets/Header.jpg'
 import { API_URL } from '../config/api.js'
 
-const PIZZA_URL = `${API_URL}/api/pizzas/p001`
-
 const Pizza = () => {
-  const [pizza, setPizza] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { id } = useParams()
+  const [requestState, setRequestState] = useState({
+    id: null,
+    pizza: null,
+    error: '',
+  })
 
   useEffect(() => {
     const controller = new AbortController()
+    const pizzaUrl = `${API_URL}/api/pizzas/${id}`
 
     const loadPizza = async () => {
       try {
-        const response = await fetch(PIZZA_URL, { signal: controller.signal })
+        const response = await fetch(pizzaUrl, { signal: controller.signal })
 
         if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('NOT_FOUND')
+          }
           throw new Error(`La API respondió con el estado ${response.status}.`)
         }
 
         const data = await response.json()
-        setPizza(data)
+        setRequestState({ id, pizza: data, error: '' })
       } catch (requestError) {
         if (requestError.name !== 'AbortError') {
-          setError('No pudimos cargar la pizza. Comprueba que la API esté disponible.')
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false)
+          setRequestState({
+            id,
+            pizza: null,
+            error:
+              requestError.message === 'NOT_FOUND'
+                ? 'No encontramos una pizza con ese identificador.'
+                : 'No pudimos cargar la pizza. Comprueba que la API esté disponible.',
+          })
         }
       }
     }
@@ -36,7 +45,12 @@ const Pizza = () => {
     loadPizza()
 
     return () => controller.abort()
-  }, [])
+  }, [id])
+
+  const isCurrentRequest = requestState.id === id
+  const loading = !isCurrentRequest
+  const pizza = isCurrentRequest ? requestState.pizza : null
+  const error = isCurrentRequest ? requestState.error : ''
 
   const useFallbackImage = (event) => {
     event.currentTarget.onerror = null

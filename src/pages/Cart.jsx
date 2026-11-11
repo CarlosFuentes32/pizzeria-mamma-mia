@@ -1,8 +1,10 @@
 import fallbackPizza from '../assets/Header.jpg'
 import { useCart } from '../context/CartContext.js'
+import { useUser } from '../context/UserContext.js'
 
 const Cart = () => {
   const { cart, increasePizza, decreasePizza, total } = useCart()
+  const { token } = useUser()
 
   const useFallbackImage = (event) => {
     event.currentTarget.onerror = null
@@ -56,7 +58,13 @@ const Cart = () => {
 
         <div className="cart__summary">
           <p>Total: ${total.toLocaleString('es-CL')}</p>
-          <button type="button" className="button button--pay">Pagar</button>
+          <button
+            type="button"
+            className="button button--pay"
+            disabled={!token || cart.length === 0}
+          >
+            Pagar
+          </button>
         </div>
       </section>
     </main>
